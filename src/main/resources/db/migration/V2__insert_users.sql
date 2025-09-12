@@ -1,0 +1,11 @@
+-- Вставка пользователей --
+INSERT INTO users (username, password, email, firstname, lastname, enabled)
+VALUES ('admin', '$2a$12$OwzzwI7I8l1uo7vUD9Ff.eAGprZxaaQBq.qqW1nqvpegS2tU9yYQK', 'nikolai.horetski@gmail.com', 'admin', 'admin', true);
+
+INSERT INTO users (username, password, email, firstname, lastname, enabled)
+VALUES ('user', '$2a$12$IhpxZSbUjjm4w1s0xmTDde/ad1LPeXnJBDLnAEcIQUIDV2ly1Lnom', 'nikolai.horetski@gmail.com', 'user', 'user', true);
+
+-- Вставка ролей для пользователей --
+INSERT INTO authority (username, authority) VALUES ('admin', 'ROLE_ADMIN');
+
+INSERT INTO authority (username, authority) VALUES ('user', 'ROLE_USER');
