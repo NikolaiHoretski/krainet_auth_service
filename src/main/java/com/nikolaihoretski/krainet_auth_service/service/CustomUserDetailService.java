@@ -33,7 +33,7 @@ public class CustomUserDetailService implements UserDetailsService {
                 .map(a -> new SimpleGrantedAuthority(a.getAuthority()))
                 .collect(Collectors.toList());
 
-        logger.info("Пользователь: {}", user.getUsername() + " вошел в систему");
+        logger.info("Пользователю: {}", user.getUsername() + " был выдан токен для входа в систему");
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
