@@ -11,12 +11,34 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
 
-    public static final String EXCHANGE_NAME = "event.exchange";
-    public static final String ROUTING_KEY = "routing.key.*";
+    public static final String QUEUE_NAME_REQUEST_EMAILS = "requestemail.queue";
+    private static final String ROUTING_KEY_REQUEST_EMAILS = "requestemail.routing.key.*";
+
+    public static final String QUEUE_NAME_GET_EMAIL = "getemail.queue";
+    private static final String ROUTING_KEY_GET_EMAIL = "getemail.routing.key.*";
+
+    public static final String QUEUE_NAME_SEND_EMAIL = "sendemail.queue";
+    public static final String EXCHANGE = "sendemail.exchange";
+    public static final String ROUTING_KEY_SEND_EMAIL = "sendemail.routing.key.*";
 
     @Bean
-    public TopicExchange exchange() {
-        return new TopicExchange(EXCHANGE_NAME, true, false);
+    public Queue requestEmailQueue() {
+        return new Queue(QUEUE_NAME_REQUEST_EMAILS, true);
+    }
+
+    @Bean
+    public Queue getEmailQueue() {
+        return new Queue(QUEUE_NAME_GET_EMAIL, true);
+    }
+
+    @Bean
+    public Queue sendEmailQueue() {
+        return new Queue(QUEUE_NAME_SEND_EMAIL, true);
+    }
+
+    @Bean
+    public TopicExchange sendEmailExchange() {
+        return new TopicExchange(EXCHANGE, true, false);
     }
 
     @Bean

@@ -12,10 +12,10 @@ public class EventPublisher {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void publishEvent(String username, String email, String password) {
+    public void publishEvent(String username, String email, String password, String operationType) {
 
-        UserEvent event = new UserEvent(username, email, password);
+        UserEvent event = new UserEvent(username, email, password, operationType);
 
-        rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE_NAME, RabbitConfig.ROUTING_KEY, event);
+        rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_KEY_SEND_EMAIL, event);
     }
 }

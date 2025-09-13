@@ -94,7 +94,8 @@ public class UserServiceImpl implements UserService {
             eventPublisher.publishEvent(
                     saved.getUsername(),
                     saved.getEmail(),
-                    saved.getPassword()
+                    saved.getPassword(),
+                    "UPDATE"
             );
         }
         return saved;
@@ -110,7 +111,8 @@ public class UserServiceImpl implements UserService {
             eventPublisher.publishEvent(
                     user.getUsername(),
                     user.getEmail(),
-                    user.getPassword()
+                    user.getPassword(),
+                    "DELETE"
             );
         }
         userRepository.deleteById(username);

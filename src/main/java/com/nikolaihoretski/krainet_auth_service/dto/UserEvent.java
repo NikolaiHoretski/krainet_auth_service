@@ -7,14 +7,16 @@ public class UserEvent implements Serializable {
     private String username;
     private String email;
     private String password;
+    private String operationType;
 
     public UserEvent() {
     }
 
-    public UserEvent(String username, String email, String password) {
+    public UserEvent(String username, String email, String password, String operationType) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.operationType = operationType;
     }
 
     public String getUsername() {
@@ -41,12 +43,21 @@ public class UserEvent implements Serializable {
         this.password = password;
     }
 
+    public String getOperationType() {
+        return operationType;
+    }
+
+    public void setOperationType(String operationType) {
+        this.operationType = operationType;
+    }
+
     @Override
     public String toString() {
         return "UserEvent{" +
                 "username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", operationType='" + operationType + '\'' +
                 '}';
     }
 }

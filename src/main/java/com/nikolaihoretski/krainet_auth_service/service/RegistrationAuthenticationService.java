@@ -63,7 +63,8 @@ public class RegistrationAuthenticationService {
             eventPublisher.publishEvent(
                     user.getUsername(),
                     user.getEmail(),
-                    user.getPassword()
+                    user.getPassword(),
+                    "CREATE"
             );
         logger.info("Пользователь с username '{}' добавлен", user.getUsername());
     }
