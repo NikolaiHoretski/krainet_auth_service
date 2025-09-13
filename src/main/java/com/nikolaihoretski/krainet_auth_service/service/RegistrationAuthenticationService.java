@@ -2,6 +2,7 @@ package com.nikolaihoretski.krainet_auth_service.service;
 
 import com.nikolaihoretski.krainet_auth_service.dto.UserJWTDTO;
 import com.nikolaihoretski.krainet_auth_service.model.Authority;
+import com.nikolaihoretski.krainet_auth_service.model.OperationType;
 import com.nikolaihoretski.krainet_auth_service.model.RegisterRequest;
 import com.nikolaihoretski.krainet_auth_service.model.User;
 import com.nikolaihoretski.krainet_auth_service.repository.AuthorityRepository;
@@ -60,11 +61,13 @@ public class RegistrationAuthenticationService {
 
         authorityRepository.save(authority);
 
+        String create = OperationType.CREATE.name();
+
             eventPublisher.publishEvent(
                     user.getUsername(),
                     user.getEmail(),
                     user.getPassword(),
-                    "CREATE"
+                    create
             );
         logger.info("Пользователь с username '{}' добавлен", user.getUsername());
     }

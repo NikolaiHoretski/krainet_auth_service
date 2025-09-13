@@ -11,7 +11,7 @@ CREATE TABLE users (
 -- Создание таблицы authority --
 CREATE TABLE authority (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
+    username VARCHAR(50),
     authority VARCHAR(50),
-    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE
+    FOREIGN KEY (username) REFERENCES users(username)
 );
