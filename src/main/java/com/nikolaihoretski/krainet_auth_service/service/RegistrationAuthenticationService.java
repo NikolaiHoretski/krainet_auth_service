@@ -58,6 +58,8 @@ public class RegistrationAuthenticationService {
 
         authorityRepository.save(authority);
 
+
+
         logger.info("Пользователь с username '{}' добавлен", user.getUsername());
 
     }

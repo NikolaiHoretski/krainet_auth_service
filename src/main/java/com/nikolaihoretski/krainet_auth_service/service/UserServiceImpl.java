@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -24,6 +24,8 @@ public class UserServiceImpl implements UserService{
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthFacade authFacade;
+    @Autowired
+    private EventPublisher eventPublisher;
 
     @Override
     public User getUserById(String username) {
@@ -53,20 +55,20 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findById(username)
                 .orElseThrow(() -> new RuntimeException("user not found"));
 
-        if(updates.containsKey("firstname")) {
+        if (updates.containsKey("firstname")) {
             user.setFirstname((String) updates.get("firstname"));
         }
         if (updates.containsKey("lastname")) {
-         user.setLastname((String) updates.get("lastname"));
+            user.setLastname((String) updates.get("lastname"));
         }
-        if(updates.containsKey("password")) {
+        if (updates.containsKey("password")) {
             user.setPassword("password");
         }
-        if(updates.containsKey("email")) {
+        if (updates.containsKey("email")) {
             user.setEmail((String) updates.get("email"));
         }
 
-        if(authFacade.getCurrentRole().contains("ROLE_ADMIN")) {
+        if (authFacade.getCurrentRole().contains("ROLE_ADMIN")) {
             if (updates.containsKey("enabled")) {
                 Object enableValue = updates.get("enabled");
                 boolean boolValue;
@@ -83,7 +85,17 @@ public class UserServiceImpl implements UserService{
         }
 
         logger.info("Учетные данные Пользователя: {} обнавлены", user.getUsername());
-        return userRepository.save(user);
+
+        User saved = userRepository.save(user);
+
+        if (!authFacade.getCurrentUsername().contains("ROLE_ADMIN")) {
+            eventPublisher.publishEvent(
+                    saved.getUsername(),
+                    saved.getEmail(),
+                    saved.getPassword()
+            );
+        }
+        return saved;
     }
 
     @Override
@@ -91,6 +103,14 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findById(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         userRepository.deleteById(username);
+
+        if (!authFacade.getCurrentUsername().contains("ROLE_ADMIN")) {
+            eventPublisher.publishEvent(
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getPassword()
+            );
+        }
         logger.info("Пользователь: {} удален", user.getUsername());
     }
 }
