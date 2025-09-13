@@ -34,6 +34,8 @@ public class RegistrationAuthenticationService {
     private JWTService jwtService;
     @Autowired
     private AuthFacade authFacade;
+    @Autowired
+    private EventPublisher eventPublisher;
 
     public void register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -58,10 +60,12 @@ public class RegistrationAuthenticationService {
 
         authorityRepository.save(authority);
 
-
-
+            eventPublisher.publishEvent(
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getPassword()
+            );
         logger.info("Пользователь с username '{}' добавлен", user.getUsername());
-
     }
 
     public String verify(RegisterRequest request) {

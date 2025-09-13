@@ -104,7 +104,6 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(String username) {
         User user = userRepository.findById(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-        userRepository.deleteById(username);
 
         if (user.getAuthorities().stream()
                 .noneMatch(authority -> authority.getAuthority().contains("ROLE_ADMIN"))) {
@@ -114,6 +113,7 @@ public class UserServiceImpl implements UserService {
                     user.getPassword()
             );
         }
+        userRepository.deleteById(username);
         logger.info("Пользователь: {} удален", user.getUsername());
     }
 }
