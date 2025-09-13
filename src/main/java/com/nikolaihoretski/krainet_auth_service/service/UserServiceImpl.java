@@ -1,5 +1,6 @@
 package com.nikolaihoretski.krainet_auth_service.service;
 
+import com.nikolaihoretski.krainet_auth_service.model.Authority;
 import com.nikolaihoretski.krainet_auth_service.model.User;
 import com.nikolaihoretski.krainet_auth_service.repository.UserRepository;
 import com.nikolaihoretski.krainet_auth_service.security.AuthFacade;
@@ -88,7 +89,8 @@ public class UserServiceImpl implements UserService {
 
         User saved = userRepository.save(user);
 
-        if (!authFacade.getCurrentUsername().contains("ROLE_ADMIN")) {
+        if (user.getAuthorities().stream()
+                .noneMatch(authority -> authority.getAuthority().contains("ROLE_ADMIN"))) {
             eventPublisher.publishEvent(
                     saved.getUsername(),
                     saved.getEmail(),
@@ -104,7 +106,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         userRepository.deleteById(username);
 
-        if (!authFacade.getCurrentUsername().contains("ROLE_ADMIN")) {
+        if (user.getAuthorities().stream()
+                .noneMatch(authority -> authority.getAuthority().contains("ROLE_ADMIN"))) {
             eventPublisher.publishEvent(
                     user.getUsername(),
                     user.getEmail(),
