@@ -1,10 +1,7 @@
 package com.nikolaihoretski.krainet_auth_service.service;
 
 import com.nikolaihoretski.krainet_auth_service.dto.UserJWTDTO;
-import com.nikolaihoretski.krainet_auth_service.model.Authority;
-import com.nikolaihoretski.krainet_auth_service.model.OperationType;
-import com.nikolaihoretski.krainet_auth_service.model.RegisterRequest;
-import com.nikolaihoretski.krainet_auth_service.model.User;
+import com.nikolaihoretski.krainet_auth_service.model.*;
 import com.nikolaihoretski.krainet_auth_service.repository.AuthorityRepository;
 import com.nikolaihoretski.krainet_auth_service.repository.UserRepository;
 import com.nikolaihoretski.krainet_auth_service.security.AuthFacade;
@@ -17,6 +14,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 @Service
 public class RegistrationAuthenticationService {
@@ -37,6 +38,8 @@ public class RegistrationAuthenticationService {
     private AuthFacade authFacade;
     @Autowired
     private EventPublisherSendEmail eventPublisherSendEmail;
+    @Autowired
+    private EventPublisherGetEmail eventPublisherGetEmail;
 
     public void register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -57,16 +60,19 @@ public class RegistrationAuthenticationService {
 
         authority.setUsername(request.getUsername());
 
-        authority.setAuthority("ROLE_USER");
+        authority.setAuthority(Role.ROLE_USER.name());
 
         authorityRepository.save(authority);
 
-            eventPublisherSendEmail.publishEvent(
-                    user.getUsername(),
-                    user.getEmail(),
-                    user.getPassword(),
-                    OperationType.CREATE.name()
-            );
+        eventPublisherSendEmail.publishEventSendEmail(
+                user.getUsername(),
+                user.getEmail(),
+                user.getPassword(),
+                OperationType.CREATE.name()
+        );
+        if (user.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals(Role.ROLE_ADMIN.name()))) {
+           eventPublisherGetEmail.publisherEventGetEmail(List.of(user.getEmail()));
+        }
         logger.info("Пользователь с username '{}' добавлен", user.getUsername());
     }
 

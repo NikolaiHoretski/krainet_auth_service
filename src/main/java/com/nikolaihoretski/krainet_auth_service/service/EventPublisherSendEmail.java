@@ -12,7 +12,7 @@ public class EventPublisherSendEmail {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void publishEvent(String username, String email, String password, String operationType) {
+    public void publishEventSendEmail(String username, String email, String password, String operationType) {
 
         UserEvent event = new UserEvent(username, email, password, operationType);
 

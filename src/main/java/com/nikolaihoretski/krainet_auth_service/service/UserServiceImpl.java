@@ -1,6 +1,7 @@
 package com.nikolaihoretski.krainet_auth_service.service;
 
 import com.nikolaihoretski.krainet_auth_service.model.OperationType;
+import com.nikolaihoretski.krainet_auth_service.model.Role;
 import com.nikolaihoretski.krainet_auth_service.model.User;
 import com.nikolaihoretski.krainet_auth_service.repository.UserRepository;
 import com.nikolaihoretski.krainet_auth_service.security.AuthFacade;
@@ -90,8 +91,8 @@ public class UserServiceImpl implements UserService {
         User saved = userRepository.save(user);
 
         if (user.getAuthorities().stream()
-                .noneMatch(authority -> authority.getAuthority().contains("ROLE_ADMIN"))) {
-            eventPublisherSendEmail.publishEvent(
+                .noneMatch(authority -> authority.getAuthority().contains(Role.ROLE_ADMIN.name()))) {
+            eventPublisherSendEmail.publishEventSendEmail(
                     saved.getUsername(),
                     saved.getEmail(),
                     saved.getPassword(),
@@ -107,8 +108,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
         if (user.getAuthorities().stream()
-                .noneMatch(authority -> authority.getAuthority().contains("ROLE_ADMIN"))) {
-            eventPublisherSendEmail.publishEvent(
+                .noneMatch(authority -> authority.getAuthority().equals(Role.ROLE_ADMIN.name()))) {
+            eventPublisherSendEmail.publishEventSendEmail(
                     user.getUsername(),
                     user.getEmail(),
                     user.getPassword(),
@@ -117,5 +118,9 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.deleteById(username);
         logger.info("Пользователь: {} удален", user.getUsername());
+    }
+
+    public List<String> findAdminEmails() {
+        return userRepository.findUsersByRoles("ROLE_ADMIN");
     }
 }
