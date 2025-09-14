@@ -90,15 +90,13 @@ public class UserServiceImpl implements UserService {
 
         User saved = userRepository.save(user);
 
-        String update = OperationType.UPDATE.name();
-
         if (user.getAuthorities().stream()
                 .noneMatch(authority -> authority.getAuthority().contains("ROLE_ADMIN"))) {
             eventPublisher.publishEvent(
                     saved.getUsername(),
                     saved.getEmail(),
                     saved.getPassword(),
-                    update
+                    OperationType.UPDATE.name()
             );
         }
         return saved;
@@ -109,15 +107,13 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-        String delete = OperationType.DELETE.name();
-
         if (user.getAuthorities().stream()
                 .noneMatch(authority -> authority.getAuthority().contains("ROLE_ADMIN"))) {
             eventPublisher.publishEvent(
                     user.getUsername(),
                     user.getEmail(),
                     user.getPassword(),
-                    delete
+                    OperationType.DELETE.name()
             );
         }
         userRepository.deleteById(username);

@@ -61,13 +61,11 @@ public class RegistrationAuthenticationService {
 
         authorityRepository.save(authority);
 
-        String create = OperationType.CREATE.name();
-
             eventPublisher.publishEvent(
                     user.getUsername(),
                     user.getEmail(),
                     user.getPassword(),
-                    create
+                    OperationType.CREATE.name()
             );
         logger.info("Пользователь с username '{}' добавлен", user.getUsername());
     }
