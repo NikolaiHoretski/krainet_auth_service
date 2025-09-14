@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        logger.info("Учетные данные Пользователя: {} обнавлены", user.getUsername());
+        logger.info("Учетные данные Пользователя: {} обновлены", user.getUsername());
 
         User saved = userRepository.save(user);
 
