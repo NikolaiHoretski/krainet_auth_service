@@ -1,6 +1,5 @@
 package com.nikolaihoretski.krainet_auth_service.service;
 
-import com.nikolaihoretski.krainet_auth_service.model.Authority;
 import com.nikolaihoretski.krainet_auth_service.model.OperationType;
 import com.nikolaihoretski.krainet_auth_service.model.User;
 import com.nikolaihoretski.krainet_auth_service.repository.UserRepository;
@@ -27,7 +26,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private AuthFacade authFacade;
     @Autowired
-    private EventPublisher eventPublisher;
+    private EventPublisherSendEmail eventPublisherSendEmail;
 
     @Override
     public User getUserById(String username) {
@@ -92,7 +91,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.getAuthorities().stream()
                 .noneMatch(authority -> authority.getAuthority().contains("ROLE_ADMIN"))) {
-            eventPublisher.publishEvent(
+            eventPublisherSendEmail.publishEvent(
                     saved.getUsername(),
                     saved.getEmail(),
                     saved.getPassword(),
@@ -109,7 +108,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.getAuthorities().stream()
                 .noneMatch(authority -> authority.getAuthority().contains("ROLE_ADMIN"))) {
-            eventPublisher.publishEvent(
+            eventPublisherSendEmail.publishEvent(
                     user.getUsername(),
                     user.getEmail(),
                     user.getPassword(),

@@ -36,7 +36,7 @@ public class RegistrationAuthenticationService {
     @Autowired
     private AuthFacade authFacade;
     @Autowired
-    private EventPublisher eventPublisher;
+    private EventPublisherSendEmail eventPublisherSendEmail;
 
     public void register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -61,7 +61,7 @@ public class RegistrationAuthenticationService {
 
         authorityRepository.save(authority);
 
-            eventPublisher.publishEvent(
+            eventPublisherSendEmail.publishEvent(
                     user.getUsername(),
                     user.getEmail(),
                     user.getPassword(),
