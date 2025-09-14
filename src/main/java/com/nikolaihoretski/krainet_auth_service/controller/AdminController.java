@@ -1,6 +1,5 @@
 package com.nikolaihoretski.krainet_auth_service.controller;
 
-import com.nikolaihoretski.krainet_auth_service.model.RegisterRequest;
 import com.nikolaihoretski.krainet_auth_service.model.User;
 import com.nikolaihoretski.krainet_auth_service.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

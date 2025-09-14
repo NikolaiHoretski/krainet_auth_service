@@ -23,6 +23,5 @@ public class EventPublisherGetEmail {
         EmailList list = new EmailList(emailList);
 
         rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_KEY_GET_EMAIL, list);
-
     }
 }

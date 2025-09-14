@@ -30,25 +30,22 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new  BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/krainet/registration", "/krainet/login").permitAll()
-                .requestMatchers("/krainet/admin/**").hasRole("ADMIN")
-                .requestMatchers("/krainet/user/**").hasAnyRole("USER", "ADMIN")
-                .anyRequest().authenticated()
-        )
+                        .requestMatchers("/krainet/registration", "/krainet/login").permitAll()
+                        .requestMatchers("/krainet/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/krainet/user/**").hasAnyRole("USER", "ADMIN")
+                        .anyRequest().authenticated()
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
-
     }
-
-
 }

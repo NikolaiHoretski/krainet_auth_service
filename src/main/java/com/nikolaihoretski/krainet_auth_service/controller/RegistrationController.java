@@ -18,12 +18,11 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        try{
+        try {
             registrationService.register(request);
             return ResponseEntity.ok("User registered");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 }

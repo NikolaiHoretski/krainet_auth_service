@@ -44,7 +44,6 @@ public class JWTService {
         logger.info("Claims : {}", claims);
 
 
-
         return Jwts.builder()
                 .claims()
                 .add(claims)

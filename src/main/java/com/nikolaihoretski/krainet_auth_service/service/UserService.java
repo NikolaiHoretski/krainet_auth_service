@@ -8,7 +8,10 @@ import java.util.Map;
 public interface UserService {
 
     User getUserById(String username);
+
     List<User> getAllUsers();
+
     User updateUserField(String username, Map<String, Object> updates);
+
     void deleteUser(String username);
 }
