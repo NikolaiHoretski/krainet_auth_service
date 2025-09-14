@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  krainet_auth_service:
+    build: .
+    container_name: krainet_auth_service
+    ports:
+      - "8080:8080"
+    environment:
+      - ADMIN_EMAIL_1
+      - ADMIN_EMAIL_2
+      - USER_EMAIL
