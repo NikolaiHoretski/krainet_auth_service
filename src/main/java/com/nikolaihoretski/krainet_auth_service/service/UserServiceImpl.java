@@ -64,7 +64,8 @@ public class UserServiceImpl implements UserService {
             user.setLastname((String) updates.get("lastname"));
         }
         if (updates.containsKey("password")) {
-            user.setPassword("password");
+            String pass = (String) updates.get("password");
+            user.setPassword(passwordEncoder.encode(pass));
         }
         if (updates.containsKey("email")) {
             user.setEmail((String) updates.get("email"));
