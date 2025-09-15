@@ -10,3 +10,12 @@ services:
       - ADMIN_EMAIL_1
       - ADMIN_EMAIL_2
       - USER_EMAIL
+      - SPRING_DATASOURCE_URL
+      - SPRING_DATASOURCE_USERNAME
+      - SPRING_DATASOURCE_PASSWORD
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    external: true
